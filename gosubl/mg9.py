@@ -302,15 +302,10 @@ def fmt(fn, src):
 	st = gs.settings_dict()
 	x = st.get('fmt_cmd')
 	if x:
-		res, err = bcall('sh', {
-			'Env': sh.env(),
-			'Cmd': {
-					'Name': x[0],
-					'Args': x[1:],
-					'Input': src or '',
-			},
-		})
-		return res.get('out', ''), (err or res.get('err', ''))
+		os.unsetenv('DYLD_INSERT_LIBRARIES')
+		process = subprocess.Popen(x, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		out, err = process.communicate(input=src.encode('utf-8'))
+		return out.decode('utf-8'), err.decode('utf-8')
 
 	res, err = bcall('fmt', {
 		'Fn': fn or '',
