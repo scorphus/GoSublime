@@ -304,9 +304,9 @@ def fmt(fn, src):
 	if x:
 		os.unsetenv('DYLD_INSERT_LIBRARIES')
 		st_env = {}
-		for k, v in st.get('env', None).items():
+		for k, v in st.get('env', {}).items():
 			st_env[k] = os.path.expandvars(v)
-		process = subprocess.Popen(x, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=st_env)
+		process = subprocess.Popen(x, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=st_env or None)
 		out, err = process.communicate(input=src.encode('utf-8'))
 		return out.decode('utf-8'), err.decode('utf-8')
 
