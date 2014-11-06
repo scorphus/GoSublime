@@ -40,14 +40,14 @@ class GsTestCommand(sublime_plugin.WindowCommand):
 					if k == 'Benchmark':
 						args[s] = ['-test.run=none', '-test.bench="%s.*"' % k]
 					else:
-						args[s] = ['-test.run="%s.*"' % k]
+						args[s] = ['-gocheck.f "%s.*"' % k]
 
 			for k in names:
 				ents.append(k)
 				if k.startswith('Benchmark'):
 					args[k] = ['-test.run=none', '-test.bench="^%s$"' % k]
 				else:
-					args[k] = ['-test.run="^%s$"' % k]
+					args[k] = ['-gocheck.f "^%s$"' % k]
 
 			def cb(i, win):
 				if i >= 0:
@@ -86,7 +86,7 @@ def handle_action(view, action):
 		if prefix == 'Benchmark':
 			cmd = ['go', 'test', '-test.run=none', '-test.bench="%s"' % pat]
 		else:
-			cmd = ['go', 'test', '-test.run="%s"' % pat]
+			cmd = ['go', 'test', '-gocheck.f "%s"' % pat]
 
 		view.run_command('gs9o_open', {'run': cmd})
 
